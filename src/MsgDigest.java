@@ -18,10 +18,11 @@ public class MsgDigest {
             String msg = "Welcom to java JCA!!";
             byte[] bytes = mac.doFinal(msg.getBytes());
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             for (byte b : bytes)
-                sb.append(String.format());
-            System.out.println(sb.toString());
+                builder.append(String.format("%02x", b));
+
+            System.out.println(builder);
         } catch (Exception e) {
             e.printStackTrace();
         }
