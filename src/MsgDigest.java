@@ -1,27 +1,25 @@
+import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
-import javax.crypto.Mac;
-import java.security.Key;
-import java.security.SecureRandom;
+import javax.crypto.SecretKey;
 
 public class MsgDigest {
     public static void main(String[] args) {
         try {
-            // 인스턴스 생성
-            KeyGenerator generator = KeyGenerator.getInstance("DES"); // 대칭키 방식, 비밀키 생성기를 만듦
-            SecureRandom random = new SecureRandom();
-            generator.init(random); // random을 통해 generator를 초기화
-            Key key = generator.generateKey();  // 비밀키 생성
+            // 암호화
+            String text = "Hello world DES, Welcome to Cryptography.";
+            KeyGenerator generator = KeyGenerator.getInstance("DES"); // DES 키 생성 알고리즘
+            SecretKey key = generator.generateKey();
+            Cipher enc = Cipher.getInstance("DES/ECB/PKCS5Padding"); // DES 암호화 알고리즘
+            enc.init(Cipher.ENCRYPT_MODE, key);
+            byte[] cipher = enc.doFinal(text.getBytes());   // text -> cipher
+            System.out.println("Cipher text bytes: " + cipher);
 
-            Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(key);  // 다이제스트 메세지 생성에 비밀키를 활용
-
-            String msg = "Welcom to java JCA!!";
-            byte[] bytes = mac.doFinal(msg.getBytes());
-
-            StringBuilder sb = new StringBuilder();
-            for (byte b : bytes)
-                sb.append(String.format());
-            System.out.println(sb.toString());
+            // 복호화
+            Cipher dec = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            dec.init(Cipher.DECRYPT_MODE, key);
+            byte[] plain = dec.doFinal(cipher); // cipher -> plain
+            System.out.println("Plain text bytes: " + plain);
+            System.out.println("Plain text: " + new String(plain));
         } catch (Exception e) {
             e.printStackTrace();
         }
